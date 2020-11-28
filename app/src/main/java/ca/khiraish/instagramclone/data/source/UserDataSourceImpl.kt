@@ -16,7 +16,8 @@ class UserDataSourceImpl : UserDataSource {
     override fun signUp(
         userName: String,
         email: String,
-        password: String
+        password: String,
+        fullName: String
     ): Completable {
         return Completable.create{ emitter ->
             FirebaseAuth.getInstance()
@@ -26,7 +27,7 @@ class UserDataSourceImpl : UserDataSource {
                         task.result?.user?.uid?.let {
                             FirebaseDatabase.getInstance().getReference("Users")
                                 .child(it)
-                                .setValue(User(userId = it, userName = userName))
+                                .setValue(User(userId = it, userName = userName, userEmail = email, userFullName = fullName, userBio = null, userImage = null))
                                 .addOnSuccessListener { Log.d(TAG, "signUp: Success!!") }
                                 .addOnFailureListener { Log.d(TAG, "signUp: Failed... ><")}
                         }

@@ -1,80 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorWhite"
-    tools:context=".ui.account.SignUpFragment">
 
-    <LinearLayout
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ca.khiraish.instagramclone.ui.account.AccountViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/colorWhite"
+        tools:context=".ui.account.SignUpFragment">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:src="@drawable/logo"/>
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sign_up_username_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/text_input_white_bg"
-            android:padding="10dp"
-            android:hint="Username"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sign_up_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/text_input_white_bg"
-            android:padding="10dp"
-            android:hint="Name"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:src="@drawable/logo"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sign_up_email_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/text_input_white_bg"
-            android:padding="10dp"
-            android:hint="Email"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_username_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/text_input_white_bg"
+                android:padding="10dp"
+                android:text="@={viewModel.username}"
+                android:hint="Username"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/sign_up_password_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/text_input_white_bg"
-            android:padding="10dp"
-            android:hint="Password"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/text_input_white_bg"
+                android:padding="10dp"
+                android:text="@={viewModel.fullname}"
+                android:hint="Name"/>
 
-        <Button
-            android:id="@+id/sign_up_sign_up_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/btn_white_bg"
-            android:text="Sign Up"
-            android:padding="10dp"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_email_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/text_input_white_bg"
+                android:padding="10dp"
+                android:text="@={viewModel.email}"
+                android:hint="Email"/>
 
-        <TextView
-            android:id="@+id/sign_up_already_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Already a user?"
-            android:layout_marginTop="15dp"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sign_up_password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/text_input_white_bg"
+                android:padding="10dp"
+                android:text="@={viewModel.password}"
+                android:hint="Password"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/sign_up_sign_up_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_white_bg"
+                android:text="Sign Up"
+                android:onClick="@{v -> viewModel.signUpClick()}"
+                android:padding="10dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/sign_up_already_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already a user?"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

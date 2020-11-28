@@ -5,7 +5,8 @@ data class User constructor(
     var userName: String? = null,
     var userImage: String? = null,
     var userBio: String? = null,
-    var userFullName: String? = null) {
+    var userFullName: String? = null,
+    var userEmail: String? = null) {
     fun toMap(): Map<String, Any> =
         HashMap<String, Any>().apply {
             userId?.let { put("userId", it) }
@@ -13,5 +14,6 @@ data class User constructor(
             userImage?.let { put("userImage", it) }
             userBio?.let { put("userBio", it) }
             userFullName?.let { put("userFullName", it) }
+            userEmail?.let { put("userEmail", it) }
         }
 }

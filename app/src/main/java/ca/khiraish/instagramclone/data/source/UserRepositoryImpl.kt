@@ -7,11 +7,11 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDataSource) : UserRepository {
     override fun isSignIn(): Observable<Boolean> {
-        TODO("Not yet implemented")
+        return userDataSource.isSignIn()
     }
 
-    override fun signUp(userName: String, email: String, password: String): Completable {
-        TODO("Not yet implemented")
+    override fun signUp(userName: String, email: String, password: String, fullName: String): Completable {
+        return userDataSource.signUp(userName, email, password, fullName)
     }
 
     override fun signIn(email: String, password: String): Completable {
