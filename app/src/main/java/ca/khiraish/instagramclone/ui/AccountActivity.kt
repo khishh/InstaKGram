@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import ca.khiraish.instagramclone.R
-import ca.khiraish.instagramclone.di.ViewModelFactory
 import ca.khiraish.instagramclone.ui.account.AccountViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -34,7 +33,7 @@ class AccountActivity : DaggerAppCompatActivity() {
 
         viewModel.authenticationPassed.observe(this, observer = Observer {
             Log.d(TAG, "onCreate: onChanged")
-            Navigation.findNavController(this, R.id.account_fragment_container)
+            Navigation.findNavController(this, R.id.account_nav_fragment)
                 .navigate(R.id.mainActivity)
             finish()
         })
@@ -47,5 +46,5 @@ class AccountActivity : DaggerAppCompatActivity() {
 
         viewModel.isSignIn()
     }
-    
+
 }
