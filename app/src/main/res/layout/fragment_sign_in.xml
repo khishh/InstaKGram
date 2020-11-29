@@ -37,6 +37,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/text_input_white_bg"
                 android:padding="10dp"
+                android:text="@={viewModel.email}"
                 android:hint="Email"/>
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,15 +47,24 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/text_input_white_bg"
                 android:padding="10dp"
+                android:text="@={viewModel.password}"
                 android:hint="Password"/>
+
+            <TextView
+                android:id="@+id/login_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@={viewModel.errorMessage}"/>
 
             <Button
                 android:id="@+id/login_log_in_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/btn_white_bg"
                 android:text="login"
+                android:onClick="@{v -> viewModel.signInClick()}"
                 android:padding="10dp"/>
 
             <TextView

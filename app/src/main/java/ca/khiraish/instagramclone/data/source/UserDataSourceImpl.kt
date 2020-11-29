@@ -23,13 +23,13 @@ class UserDataSourceImpl : UserDataSource {
             FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if(task.isComplete){
+                    if(task.isSuccessful){
                         task.result?.user?.uid?.let {
                             FirebaseDatabase.getInstance().getReference("Users")
                                 .child(it)
-                                .setValue(User(userId = it, userName = userName, userEmail = email, userFullName = fullName, userBio = null, userImage = null))
-                                .addOnSuccessListener { Log.d(TAG, "signUp: Success!!") }
-                                .addOnFailureListener { Log.d(TAG, "signUp: Failed... ><")}
+                                .setValue(User(userId = it, userName = userName, userEmail = email, userFullName = fullName, userBio = "", userImage = ""))
+                                .addOnSuccessListener { emitter.onComplete() }
+                                .addOnFailureListener { emitter.onError(Throwable(task.exception?.message))}
                         }
                     }
                     else{
@@ -40,7 +40,18 @@ class UserDataSourceImpl : UserDataSource {
     }
 
     override fun signIn(email: String, password: String): Completable {
-        TODO("Not yet implemented")
+        return  Completable.create { emitter ->
+            FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        emitter.onComplete()
+                    }
+                    else{
+                        emitter.onError(Throwable(task.exception?.message))
+                    }
+                }
+        }
     }
 
     override fun signOut(): Completable {

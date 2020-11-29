@@ -15,7 +15,7 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
     }
 
     override fun signIn(email: String, password: String): Completable {
-        TODO("Not yet implemented")
+        return userDataSource.signIn(email, password)
     }
 
     override fun signOut(): Completable {

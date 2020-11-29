@@ -1,19 +1,17 @@
 package ca.khiraish.instagramclone.ui.account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
-import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.databinding.FragmentSignInBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-
+private const val TAG = "SignInFragment"
 class SignInFragment : DaggerFragment() {
 
     @Inject
@@ -22,9 +20,8 @@ class SignInFragment : DaggerFragment() {
     private lateinit var binding: FragmentSignInBinding
 
     private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(AccountViewModel::class.java)
+        ViewModelProvider(requireActivity(), viewModelFactory).get(AccountViewModel::class.java)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,23 +31,14 @@ class SignInFragment : DaggerFragment() {
         binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
-//
-//    override fun on(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        binding.viewModel = viewModel
-//        binding.loginLogInBtn.setOnClickListener {
-//            val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment();
-//            Navigation.findNavController(requireView()).navigate(action)
-//        }
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(TAG, "onCreate: " + viewModel.hashCode())
         binding.viewModel = viewModel
-        binding.loginLogInBtn.setOnClickListener {
-            val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment();
-            Navigation.findNavController(requireView()).navigate(action)
+        binding.loginNewUser.setOnClickListener {
+            val signUpDir = SignInFragmentDirections.actionSignInFragmentToSignUpFragment();
+            Navigation.findNavController(requireView()).navigate(signUpDir)
         }
     }
 }

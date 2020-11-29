@@ -1,16 +1,19 @@
 package ca.khiraish.instagramclone.ui.account
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.databinding.FragmentSignUpBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
+private const val TAG = "SignUpFragment"
 class SignUpFragment : DaggerFragment() {
 
     @Inject
@@ -19,7 +22,7 @@ class SignUpFragment : DaggerFragment() {
     private lateinit var binding: FragmentSignUpBinding
 
     private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(AccountViewModel::class.java)
+        ViewModelProvider(requireActivity(), viewModelFactory).get(AccountViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,11 @@ class SignUpFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onCreate: " + viewModel.hashCode())
         binding.viewModel = viewModel
+        binding.signUpAlreadyUser.setOnClickListener {
+            val signInDir = SignUpFragmentDirections.actionSignUpFragmentToSignInFragment();
+            Navigation.findNavController(requireView()).navigate(signInDir)
+        }
     }
 }
