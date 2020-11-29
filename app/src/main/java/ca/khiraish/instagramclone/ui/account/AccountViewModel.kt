@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ca.khiraish.instagramclone.data.source.UserRepository
 import ca.khiraish.instagramclone.util.SingleLiveEvent
@@ -24,7 +25,7 @@ class AccountViewModel @Inject constructor(private val repository: UserRepositor
     val errorMessage = ObservableField<String>()
 
     val authenticationPassed = SingleLiveEvent<Void>()
-    val authenticating = MediatorLiveData<Boolean>()
+    val authenticating = MutableLiveData<Boolean>()
 
     private val disposable = CompositeDisposable()
 
@@ -34,6 +35,7 @@ class AccountViewModel @Inject constructor(private val repository: UserRepositor
     }
 
     fun signUpClick(){
+        authenticating.value = true
         if(username.get().isNullOrEmpty() || fullName.get().isNullOrEmpty() ||
             email.get().isNullOrEmpty() || password.get().isNullOrEmpty()){
             errorMessage.set("SignUpError: Please fill in all fields above")
@@ -42,6 +44,9 @@ class AccountViewModel @Inject constructor(private val repository: UserRepositor
             disposable.add(repository.signUp(userName = username.get()!!, email = email.get()!!, password = password.get()!!, fullName = fullName.get()!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete {
+                    authenticating.value = false
+                }
                 .subscribe(
                     {
                         Log.d(TAG, "signUpClick: SUCCESS")
@@ -56,6 +61,7 @@ class AccountViewModel @Inject constructor(private val repository: UserRepositor
     }
 
     fun signInClick(){
+        authenticating.value = true
         if(email.get().isNullOrEmpty() || password.get().isNullOrEmpty()){
             Log.d(TAG, "signInClick: " + email.get() + " " + password.get())
             errorMessage.set("SignInError: Please fill in all fields above")
@@ -65,6 +71,9 @@ class AccountViewModel @Inject constructor(private val repository: UserRepositor
             disposable.add(repository.signIn(email = email.get()!!, password = password.get()!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete {
+                    authenticating.value = false
+                }
                 .subscribe(
                     {
                         Log.d(TAG, "signInClick: SUCCESS")
