@@ -2,11 +2,9 @@ package ca.khiraish.instagramclone.ui.account
 
 import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ca.khiraish.instagramclone.data.source.UserRepository
+import ca.khiraish.instagramclone.data.source.user.UserRepository
 import ca.khiraish.instagramclone.util.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

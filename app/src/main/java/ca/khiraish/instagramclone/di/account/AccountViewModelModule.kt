@@ -13,6 +13,6 @@ abstract class AccountViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(AccountViewModel::class)
-    abstract fun bindAccountViewModel(viewModel: AccountViewModel): ViewModel;
+    abstract fun bindAccountViewModel(viewModel: AccountViewModel): ViewModel
 
 }

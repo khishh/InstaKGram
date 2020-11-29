@@ -29,5 +29,9 @@
         android:id="@+id/nav_add"
         android:name="ca.khiraish.instagramclone.ui.post.PostFragment"
         android:label="fragment_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post" >
+        <argument
+            android:name="imageUri"
+            app:argType="string" />
+    </fragment>
 </navigation>

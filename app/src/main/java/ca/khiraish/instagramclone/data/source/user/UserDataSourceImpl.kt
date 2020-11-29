@@ -1,6 +1,5 @@
-package ca.khiraish.instagramclone.data.source
+package ca.khiraish.instagramclone.data.source.user
 
-import android.util.Log
 import ca.khiraish.instagramclone.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -8,7 +7,8 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 private const val TAG = "UserDataSourceImpl"
-class UserDataSourceImpl : UserDataSource {
+class UserDataSourceImpl :
+    UserDataSource {
 
     override fun isSignIn(): Observable<Boolean> =
         Observable.just(FirebaseAuth.getInstance().currentUser != null)

@@ -1,11 +1,14 @@
-package ca.khiraish.instagramclone.data.source
+package ca.khiraish.instagramclone.data.source.user
 
 import ca.khiraish.instagramclone.data.model.User
+import ca.khiraish.instagramclone.data.source.user.UserDataSource
+import ca.khiraish.instagramclone.data.source.user.UserRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDataSource) : UserRepository {
+class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDataSource) :
+    UserRepository {
     override fun isSignIn(): Observable<Boolean> {
         return userDataSource.isSignIn()
     }

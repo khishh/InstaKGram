@@ -1,4 +1,4 @@
-package ca.khiraish.instagramclone.data.source
+package ca.khiraish.instagramclone.data.source.user
 
 import ca.khiraish.instagramclone.data.model.User
 import io.reactivex.Completable
