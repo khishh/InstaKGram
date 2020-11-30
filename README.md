@@ -1,4 +1,4 @@
-# instagram_clone
+# InstaKGram
 Instagram clone app
 
 Currently building app
