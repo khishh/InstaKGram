@@ -35,6 +35,6 @@ object DataModule {
     @Singleton
     @Provides
     @JvmStatic
-    fun providePostDataSource() =
+    fun providePostDataSource(): PostDataSource =
         PostDataSourceImpl()
 }

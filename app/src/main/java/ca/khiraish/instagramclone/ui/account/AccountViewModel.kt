@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 private const val TAG = "AccountViewModel"
 
-class AccountViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
+class AccountViewModel @Inject constructor(
+    private val repository: UserRepository) : ViewModel() {
 
     val username = ObservableField<String>()
     val fullName = ObservableField<String>()
