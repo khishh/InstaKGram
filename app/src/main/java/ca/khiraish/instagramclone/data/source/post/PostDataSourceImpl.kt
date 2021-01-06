@@ -16,6 +16,8 @@ class PostDataSourceImpl : PostDataSource {
     private val db = FirebaseFirestore.getInstance()
     private val st = FirebaseStorage.getInstance()
 
+
+
     override fun savePost(post: Post): Completable {
         return Completable.create{ emitter ->
             val imageUri = Uri.parse(post.imageUri)

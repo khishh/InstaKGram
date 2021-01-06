@@ -14,7 +14,11 @@
         android:id="@+id/nav_search"
         android:name="ca.khiraish.instagramclone.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_nav_search_to_searchDetailFragment"
+            app:destination="@id/searchDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_fav"
         android:name="ca.khiraish.instagramclone.ui.notification.NotificationFragment"
@@ -34,4 +38,9 @@
             android:name="imageUri"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/searchDetailFragment"
+        android:name="ca.khiraish.instagramclone.ui.search.SearchDetailFragment"
+        android:label="fragment_search_detail"
+        tools:layout="@layout/fragment_search_detail" />
 </navigation>

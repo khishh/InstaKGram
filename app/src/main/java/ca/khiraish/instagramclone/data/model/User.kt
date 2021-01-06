@@ -7,13 +7,13 @@ data class User constructor(
     var userBio: String? = null,
     var userFullName: String? = null,
     var userEmail: String? = null) {
-    fun toMap(): Map<String, Any> =
-        HashMap<String, Any>().apply {
-            userId?.let { put("userId", it) }
-            userName?.let { put("userName", it) }
-            userImage?.let { put("userImage", it) }
-            userBio?.let { put("userBio", it) }
-            userFullName?.let { put("userFullName", it) }
-            userEmail?.let { put("userEmail", it) }
-        }
+//    fun toMap(): Map<String, Any> =
+//        HashMap<String, Any>().apply {
+//            userId?.let { put("userId", it) }
+//            userName?.let { put("userName", it) }
+//            userImage?.let { put("userImage", it) }
+//            userBio?.let { put("userBio", it) }
+//            userFullName?.let { put("userFullName", it) }
+//            userEmail?.let { put("userEmail", it) }
+//        }
 }
