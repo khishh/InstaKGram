@@ -55,6 +55,7 @@ class UserFragment : DaggerFragment() {
         val recyclerView = binding.userRecyclerView
         binding.userFollowBtn.setOnClickListener {
             viewModel.updateFollowingStatus(userId)
+            viewModel.updateFollowerStatus(userId)
         }
         if(viewModel.getOwnerUserId().equals(userId)){ //TODO check if the owner is looking at his own profile
             binding.userFollowBtn.visibility = View.GONE
@@ -78,8 +79,15 @@ class UserFragment : DaggerFragment() {
                 binding.userUserImage.setImageResource(R.mipmap.ic_launcher_round)
             }
         }
-        viewModel.getFollowingStatus(userId)
+//        viewModel.user.observe(viewLifecycleOwner){
+//            Log.d(TAG, "===== onChanged user $it ")
+//            viewModel.getAllFollowings(userId)
+//            viewModel.getAllFollowers(userId)
+//        }
         viewModel.fetchUserInfo(userId)
+        viewModel.getFollowingStatus(userId)
         viewModel.fetchUserPosts(userId)
+        viewModel.getAllFollowings(userId) //Todo
+        viewModel.getAllFollowers(userId)
     }
 }

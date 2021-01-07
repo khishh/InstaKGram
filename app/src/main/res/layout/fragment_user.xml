@@ -88,7 +88,7 @@
             app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintStart_toEndOf="@id/user_post_number"
             app:layout_constraintTop_toBottomOf="@id/user_appbar"
-
+            android:text="@={viewmodel.numOfFollowers}"
             android:textSize="24sp"
             android:gravity="center|bottom"/>
 
@@ -103,7 +103,6 @@
             android:text="Follower"
             android:gravity="center"/>
 
-
         <TextView
             android:id="@+id/user_following_number"
             android:layout_width="0dp"
@@ -112,7 +111,7 @@
             app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintStart_toEndOf="@id/user_follower_number"
             app:layout_constraintTop_toBottomOf="@id/user_appbar"
-
+            android:text="@={viewmodel.numOfFollowings}"
             android:textSize="24sp"
             android:gravity="center|bottom"/>
 

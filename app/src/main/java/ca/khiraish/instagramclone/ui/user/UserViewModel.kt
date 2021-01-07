@@ -19,7 +19,8 @@ class UserViewModel @Inject constructor(
 ): ViewModel() {
 
 //    lateinit var userId: String
-    private lateinit var user: User
+//    private lateinit var user: User
+    val user = MutableLiveData<User>()
     val userPosts = MutableLiveData<List<Post>>()
     val userPhotoUri = MutableLiveData<String>()
     val userName = ObservableField<String>()
@@ -32,12 +33,13 @@ class UserViewModel @Inject constructor(
     fun fetchUserInfo(userId: String){
         userRepository.getUser(userId)
             .subscribeBy(
-                onNext = { user ->
-                    this.user = user
-                    userName.set(user.userName)
-                    userBio.set(user.userBio)
+                onNext = { _user ->
+//                    this.user = user // TODO assigning user here may cause user to be null in getAlllFollowers()
+                    user.postValue(_user)
+                    userName.set(_user.userName)
+                    userBio.set(_user.userBio)
                     //ToDO let textfields have user info
-                    userPhotoUri.postValue(user.userImage)
+                    userPhotoUri.postValue(_user.userImage)
                 },
                 onError = {
                     Log.d(TAG, "fetchUserInfo: Error $it")
@@ -85,7 +87,7 @@ class UserViewModel @Inject constructor(
         if(ownerId.isNullOrEmpty()){
             Log.d(TAG, "===== updateFollowingStatus: Error ownerId not found")
         }else{
-            userRepository.updateFollowing(ownerId, userId)
+            userRepository.updateFollowing(ownerId, user.value!!)
                 .subscribeBy(
                     onNext = {
                         if(it) {
@@ -106,6 +108,52 @@ class UserViewModel @Inject constructor(
                 )
         }
     }
+
+    fun updateFollowerStatus(userId: String){
+        userRepository.getUser() // TODO fix by UserManager
+            .subscribeBy(
+                onNext = {owner->
+                    userRepository.updateFollower(owner, userId)
+                        .subscribeBy(
+                            onComplete = {
+                                Log.d(TAG, "===== updateFollowerStatus: Success!!")
+                            },
+                            onError = {
+                                Log.d(TAG, "===== updateFollowerStatus: Error!! $it")
+                            }
+                        )
+                }
+            )
+    }
+
+    fun getAllFollowers(userId: String){
+        userRepository.getAllFollowers(userId)
+            .subscribeBy(
+                onNext = {
+                    numOfFollowers.set(it.size.toString())
+                    Log.d(TAG, "getAllFollowers: $it")
+                    Log.d(TAG, "===== getAllFollowers: ${it.size}")
+                },
+                onError = {
+                    Log.d(TAG, "===== getAllFollowers: Error!! $it")
+                }
+            )
+    }
+
+    fun getAllFollowings(userId: String){
+        userRepository.getAllFollowings(userId)
+            .subscribeBy(
+                onNext = {
+                    numOfFollowings.set(it.size.toString())
+                    Log.d(TAG, "getAllFollowings: $it")
+                    Log.d(TAG, "===== getAllFollowings: ${it.size}")
+                },
+                onError = {
+                    Log.d(TAG, "===== getAllFollowings: Error!! $it")
+                }
+            )
+    }
+
 
     fun getOwnerUserId(): String? {
         return FirebaseAuth.getInstance().currentUser?.uid

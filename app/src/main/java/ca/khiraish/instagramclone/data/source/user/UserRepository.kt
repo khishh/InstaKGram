@@ -13,6 +13,8 @@ interface UserRepository {
     fun getUser(userId: String): Observable<User>
     fun getUsers(): Observable<List<User>>
     fun getAllFollowings(userId: String): Observable<List<User>>
-    fun updateFollowing(userId: String, following: String): Observable<Boolean>
+    fun getAllFollowers(userId: String): Observable<List<User>>
+    fun updateFollowing(ownerId: String, user: User): Observable<Boolean>
+    fun updateFollower(owner: User, userId: String): Completable
     fun isFollowing(ownerId: String, userId: String): Observable<Boolean>
 }

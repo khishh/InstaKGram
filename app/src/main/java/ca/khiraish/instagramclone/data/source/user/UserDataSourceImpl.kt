@@ -1,5 +1,6 @@
 package ca.khiraish.instagramclone.data.source.user
 
+import android.util.Log
 import ca.khiraish.instagramclone.data.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -108,7 +109,7 @@ class UserDataSourceImpl :
 
     override fun getUsers(): Observable<List<User>> {
         return Observable.create {emitter ->
-            val fbUser = fa.currentUser;
+            val fbUser = fa.currentUser
             if(fbUser == null){
                 emitter.onError(Throwable("You are not signed in"))
             }else{
@@ -132,9 +133,30 @@ class UserDataSourceImpl :
         }
     }
 
+    override fun getAllFollowers(userId: String): Observable<List<User>> {
+        return Observable.create { emitter ->
+            db.collection("Users")
+                .document(userId)
+                .collection("Followers")
+                .get()
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        val followers = ArrayList<User>()
+                        for(f in task.result!!){
+                            val follower = f.toObject(User::class.java)
+                            followers.add(follower)
+                        }
+                        emitter.onNext(followers)
+                    }else{
+                        emitter.onError(Throwable("===== Error: getAllFollowers ${task.exception}"))
+                    }
+                }.addOnFailureListener { emitter.onError(Throwable("===== Error: getAllFollowers $it")) }
+        }
+    }
+
     override fun getAllFollowings(userId: String): Observable<List<User>> {
         return Observable.create { emitter ->
-            db.collection("User")
+            db.collection("Users")
                 .document(userId)
                 .collection("Followings")
                 .get()
@@ -153,22 +175,19 @@ class UserDataSourceImpl :
         }
     }
 
-    override fun updateFollowing(userId: String, following: String): Observable<Boolean> {
+    override fun updateFollowing(ownerId: String, user: User): Observable<Boolean> {
         return Observable.create{emitter ->
             val dr = db.collection("Users")
-                .document(userId)
+                .document(ownerId)
                 .collection("Followings")
-                .document(following)
+                .document(user.userId!!)
             dr.get().addOnSuccessListener {
                     if(it.exists()) {
                         dr.delete()
                         emitter.onNext(false)
                     }
                     else{
-                        val update = hashMapOf<String, Any>(
-                            "userId" to userId
-                        )
-                        dr.set(update)
+                        dr.set(user)
                         emitter.onNext(true)
                     }
                 }
@@ -177,10 +196,29 @@ class UserDataSourceImpl :
         }
     }
 
-    override fun isFollowing(ownerId: String, userId: String): Observable<Boolean> {
+    override fun updateFollower(owner: User, userId: String): Completable {
+        return Completable.create{emitter ->
+            val dr = db.collection("Users")
+                .document(userId)
+                .collection("Followers")
+                .document(owner.userId!!)
+            dr.get().addOnSuccessListener {
+                if(it.exists()) {
+                    dr.delete()
+                }
+                else{
+                    dr.set(owner)
+                }
+            }
+                .addOnCompleteListener { emitter.onComplete() }
+                .addOnFailureListener { emitter.onError(Throwable("===== updateFollowings:Error $it")) }
+        }
+    }
+
+    override fun isFollowing(owner: String, userId: String): Observable<Boolean> {
         return Observable.create{emitter ->
             val dr = db.collection("Users")
-                .document(ownerId)
+                .document(owner)
                 .collection("Followings")
                 .document(userId)
             dr.get().addOnSuccessListener {

@@ -39,8 +39,16 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
         return userDataSource.getAllFollowings(userId)
     }
 
-    override fun updateFollowing(userId: String, following: String): Observable<Boolean> {
-        return userDataSource.updateFollowing(userId, following)
+    override fun getAllFollowers(userId: String): Observable<List<User>> {
+        return userDataSource.getAllFollowers(userId)
+    }
+
+    override fun updateFollowing(ownerId: String, user: User): Observable<Boolean> {
+        return userDataSource.updateFollowing(ownerId, user)
+    }
+
+    override fun updateFollower(owner: User, userId: String): Completable {
+        return userDataSource.updateFollower(owner, userId)
     }
 
     override fun isFollowing(ownerId: String, userId: String): Observable<Boolean> {

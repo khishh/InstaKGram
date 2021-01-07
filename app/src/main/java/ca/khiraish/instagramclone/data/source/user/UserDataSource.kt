@@ -13,8 +13,10 @@ interface UserDataSource {
     fun getUser(): Observable<User>
     fun getUser(userId: String): Observable<User>
     fun getUsers(): Observable<List<User>>
+    fun getAllFollowers(userId: String): Observable<List<User>>
     fun getAllFollowings(userId: String): Observable<List<User>>
-    fun updateFollowing(userId: String, following: String): Observable<Boolean>
-    fun isFollowing(ownerId: String, userId: String): Observable<Boolean>
+    fun updateFollowing(ownerId: String, user: User): Observable<Boolean>
+    fun updateFollower(owner: User, userId: String): Completable
+    fun isFollowing(owner: String, userId: String): Observable<Boolean>
 
 }
