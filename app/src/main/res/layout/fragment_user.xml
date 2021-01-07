@@ -142,7 +142,7 @@
             app:layout_constraintTop_toBottomOf="@id/user_userBio"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/user_message_btn"
-            android:text="Follow"
+            android:text="@={viewmodel.followStatus}"
             android:textAllCaps="false"/>
 
         <Button

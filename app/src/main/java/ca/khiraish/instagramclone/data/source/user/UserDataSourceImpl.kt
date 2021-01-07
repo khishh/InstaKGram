@@ -1,14 +1,7 @@
 package ca.khiraish.instagramclone.data.source.user
 
-import ca.khiraish.instagramclone.data.model.Post
 import ca.khiraish.instagramclone.data.model.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Completable
@@ -90,7 +83,7 @@ class UserDataSourceImpl :
                         if(user != null){
                             emitter.onNext(user)
                         }else{
-                            emitter.onError(Throwable("Could not fetch User data"))
+                            emitter.onError(Throwable("===== getUser:Error Could not fetch User data"))
                         }
                     }
             }
@@ -107,7 +100,7 @@ class UserDataSourceImpl :
                     if(user != null){
                         emitter.onNext(user)
                     }else{
-                        emitter.onError(Throwable("Could not fetch User data"))
+                        emitter.onError(Throwable("===== getUser:Error Could not fetch User data"))
                     }
                 }
         }
@@ -130,10 +123,10 @@ class UserDataSourceImpl :
                             }
                             emitter.onNext(users)
                         }else{
-                            emitter.onError(Throwable("Error: getUsers " + task.exception))
+                            emitter.onError(Throwable("===== Error: getUsers " + task.exception))
                         }
                     }.addOnFailureListener {
-                        emitter.onError(Throwable("Error: getUsers $it"))
+                        emitter.onError(Throwable("===== Error: getUsers $it"))
                     }
             }
         }
@@ -154,24 +147,48 @@ class UserDataSourceImpl :
                         }
                         emitter.onNext(followings)
                     }else{
-                        emitter.onError(Throwable("Error: getFollowings ${task.exception}"))
+                        emitter.onError(Throwable("===== Error: getFollowings ${task.exception}"))
                     }
-                }.addOnFailureListener { emitter.onError(Throwable("Error: getFollowings $it")) }
+                }.addOnFailureListener { emitter.onError(Throwable("===== Error: getFollowings $it")) }
         }
     }
 
-    override fun updateFollowings(userId: String, following: User): Completable {
-        return Completable.create{emitter ->
-            val dr = db.collection("User")
+    override fun updateFollowing(userId: String, following: String): Observable<Boolean> {
+        return Observable.create{emitter ->
+            val dr = db.collection("Users")
                 .document(userId)
                 .collection("Followings")
-                .document(following.userId!!)
+                .document(following)
             dr.get().addOnSuccessListener {
-                    if(it.exists()) dr.delete()
-                    else dr.set(following)
+                    if(it.exists()) {
+                        dr.delete()
+                        emitter.onNext(false)
+                    }
+                    else{
+                        val update = hashMapOf<String, Any>(
+                            "userId" to userId
+                        )
+                        dr.set(update)
+                        emitter.onNext(true)
+                    }
                 }
                 .addOnCompleteListener { emitter.onComplete() }
-                .addOnFailureListener { emitter.onError(Throwable("updateFollowings $it")) }
+                .addOnFailureListener { emitter.onError(Throwable("===== updateFollowings:Error $it")) }
+        }
+    }
+
+    override fun isFollowing(ownerId: String, userId: String): Observable<Boolean> {
+        return Observable.create{emitter ->
+            val dr = db.collection("Users")
+                .document(ownerId)
+                .collection("Followings")
+                .document(userId)
+            dr.get().addOnSuccessListener {
+                if(it.exists()) emitter.onNext(true)
+                else emitter.onNext(false)
+                }
+                .addOnCompleteListener { emitter.onComplete()}
+                .addOnFailureListener { emitter.onError(Throwable("===== getFollowing:Error $it")) }
         }
     }
 

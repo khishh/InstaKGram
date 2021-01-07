@@ -1,7 +1,9 @@
 package ca.khiraish.instagramclone.ui.user
 
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -51,6 +53,13 @@ class UserFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = binding.userRecyclerView
+        binding.userFollowBtn.setOnClickListener {
+            viewModel.updateFollowingStatus(userId)
+        }
+        if(viewModel.getOwnerUserId().equals(userId)){ //TODO check if the owner is looking at his own profile
+            binding.userFollowBtn.visibility = View.GONE
+            binding.userMessageBtn.visibility = View.GONE
+        }
         val postAdapter = PostAdapter() // TODO add listener postCLick to its argument
         recyclerView.adapter = postAdapter
         recyclerView.layoutManager = GridLayoutManager(context, 3)
@@ -69,6 +78,7 @@ class UserFragment : DaggerFragment() {
                 binding.userUserImage.setImageResource(R.mipmap.ic_launcher_round)
             }
         }
+        viewModel.getFollowingStatus(userId)
         viewModel.fetchUserInfo(userId)
         viewModel.fetchUserPosts(userId)
     }
