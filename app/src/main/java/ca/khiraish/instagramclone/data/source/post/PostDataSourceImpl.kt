@@ -32,7 +32,7 @@ class PostDataSourceImpl : PostDataSource {
                         val timestamp = FieldValue.serverTimestamp()
                         val content = hashMapOf<String, Any>(
                             "postId" to postId,
-                            "imageUri" to post.imageUri!!,
+                            "imageUri" to it.result.toString(),
                             "caption" to post.caption!!,
                             "userId" to post.userId!!,
                             "userName" to post.userName!!,

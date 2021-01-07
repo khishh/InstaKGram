@@ -8,6 +8,7 @@ import ca.khiraish.instagramclone.data.source.user.UserDataSource
 import ca.khiraish.instagramclone.data.source.user.UserDataSourceImpl
 import ca.khiraish.instagramclone.data.source.user.UserRepository
 import ca.khiraish.instagramclone.data.source.user.UserRepositoryImpl
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -37,4 +38,10 @@ object DataModule {
     @JvmStatic
     fun providePostDataSource(): PostDataSource =
         PostDataSourceImpl()
+
+    @Singleton
+    @Provides
+    @JvmStatic
+    fun providePPicasso(): Picasso =
+        Picasso.get()
 }

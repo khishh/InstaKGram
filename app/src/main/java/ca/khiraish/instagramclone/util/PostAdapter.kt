@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.data.model.Post
+import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
-class PostAdapter(): ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback) {
+class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback) {
 
 
     class PostViewHolder(itemView: View)
@@ -25,11 +27,11 @@ class PostAdapter(): ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallb
 
         fun bind(post: Post){
             currentPost = post
-            if(post.imageUri.isNullOrEmpty()){
-                image.setImageResource(R.mipmap.ic_launcher)
-            }else{
-                image.setImageURI(Uri.parse(post.imageUri))
-            }
+            Picasso.get() // TODO di to Picasso
+                .load(Uri.parse(post.imageUri))
+//                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher)
+                .into(image)
         }
 
     }
