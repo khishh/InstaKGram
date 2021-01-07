@@ -1,6 +1,7 @@
 package ca.khiraish.instagramclone.ui.profile
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ca.khiraish.instagramclone.data.model.Post
@@ -16,6 +17,9 @@ class ProfileViewModel @Inject constructor(
 ): ViewModel() {
 
     val myPosts = MutableLiveData<List<Post>>()
+    val numOfPosts = ObservableField<String>()
+    val numOfFollowers = ObservableField<Int>()
+    val numOfFollowings = ObservableField<Int>()
 
     fun fetchMyPost(){
         userRepository.getUser()
@@ -26,7 +30,8 @@ class ProfileViewModel @Inject constructor(
                         .subscribeBy(
                             onNext = {
                                 myPosts.postValue(it)
-                                Log.d(TAG, "===== fetchMyPost: Success!!")
+                                numOfPosts.set(it.size.toString())
+                                Log.d(TAG, "===== fetchMyPost: Success!! ${it.size}")
                             },
                             onError = {
                                 Log.d(TAG, "===== fetchMyPost: Error $it")

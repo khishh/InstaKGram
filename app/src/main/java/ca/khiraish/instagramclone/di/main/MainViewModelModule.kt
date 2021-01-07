@@ -6,6 +6,7 @@ import ca.khiraish.instagramclone.ui.post.PostViewModel
 import ca.khiraish.instagramclone.ui.profile.ProfileViewModel
 import ca.khiraish.instagramclone.ui.search.SearchViewModel
 import ca.khiraish.instagramclone.ui.timeline.TimelineViewModel
+import ca.khiraish.instagramclone.ui.user.UserViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,4 +34,9 @@ abstract class MainViewModelModule{
     @IntoMap
     @ViewModelKey(ProfileViewModel::class)
     abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserViewModel::class)
+    abstract fun bindUserViewModel(viewModel: UserViewModel): ViewModel
 }
