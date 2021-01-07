@@ -6,6 +6,7 @@ import ca.khiraish.instagramclone.ui.post.PostFragment
 import ca.khiraish.instagramclone.ui.profile.ProfileFragment
 import ca.khiraish.instagramclone.ui.search.SearchFragment
 import ca.khiraish.instagramclone.ui.timeline.TimelineFragment
+import ca.khiraish.instagramclone.ui.user.UserFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -31,4 +32,8 @@ abstract class MainFragmentModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun profileFragment(): ProfileFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun userFragment(): UserFragment
 }

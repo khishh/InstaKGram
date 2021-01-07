@@ -20,6 +20,8 @@ class ProfileViewModel @Inject constructor(
     val numOfPosts = ObservableField<String>()
     val numOfFollowers = ObservableField<Int>()
     val numOfFollowings = ObservableField<Int>()
+    val myrBio = ObservableField<String>()
+
 
     fun fetchMyPost(){
         userRepository.getUser()

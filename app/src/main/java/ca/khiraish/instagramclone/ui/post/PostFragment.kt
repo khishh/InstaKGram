@@ -58,5 +58,6 @@ class PostFragment : DaggerFragment() {
             Log.d(TAG, "onChange: called")
             Navigation.findNavController(view).popBackStack()
         })
+
     }
 }

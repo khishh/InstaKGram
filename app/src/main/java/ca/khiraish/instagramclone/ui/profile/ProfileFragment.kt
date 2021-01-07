@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.databinding.FragmentProfileBinding
 import ca.khiraish.instagramclone.util.ItemOffsetDecoration
+import ca.khiraish.instagramclone.util.PostAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -51,7 +52,6 @@ class ProfileFragment : DaggerFragment() {
         viewModel.myPosts.observe(viewLifecycleOwner){
             Log.d(TAG, "===== onChanged myPosts: $it")
             postAdapter.submitList(it)
-            //postAdapter.notifyDataSetChanged()
         }
         viewModel.fetchMyPost()
     }

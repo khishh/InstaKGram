@@ -2,6 +2,7 @@ package ca.khiraish.instagramclone.data.model
 
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
+import kotlin.collections.HashMap
 
 data class Post constructor(
     @ServerTimestamp
@@ -10,5 +11,9 @@ data class Post constructor(
     val imageUri: String? = null,
     val caption: String? = null,
     val userId: String? = null,
-    val userName: String? = null
-)
+    val userName: String? = null){
+//    fun toMap(): Map<String, Any> =
+//        HashMap<String, Any>().apply {
+//            postI
+//        }
+}

@@ -11,6 +11,7 @@ interface UserDataSource {
     fun signIn(email: String, password: String): Completable
     fun signOut(): Completable
     fun getUser(): Observable<User>
+    fun getUser(userId: String): Observable<User>
     fun getUsers(): Observable<List<User>>
     fun getAllFollowings(userId: String): Observable<List<User>>
     fun updateFollowings(userId: String, following: User): Completable

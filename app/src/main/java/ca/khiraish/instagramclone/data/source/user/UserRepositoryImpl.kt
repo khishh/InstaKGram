@@ -30,6 +30,10 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
         return userDataSource.getUser()
     }
 
+    override fun getUser(userId: String): Observable<User> {
+        return userDataSource.getUser(userId)
+    }
+
     override fun getUsers(): Observable<List<User>> {
         return userDataSource.getUsers()
     }

@@ -9,12 +9,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
+import ca.khiraish.instagramclone.data.model.Post
 import ca.khiraish.instagramclone.data.model.User
 
 
-class UserAdapter() : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback){
+class UserAdapter(
+    private val onItemClick: (User) -> Unit
+) : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback){
 
-    class UserViewHolder(itemView : View)
+    class UserViewHolder(itemView : View, private val onItemClick: (User) -> Unit)
         : RecyclerView.ViewHolder(itemView){
         private val userImage = itemView.findViewById<ImageView>(R.id.item_user_search_image)
         private val userId = itemView.findViewById<TextView>(R.id.item_user_search_userId)
@@ -23,6 +26,11 @@ class UserAdapter() : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCall
 
         init {
             // TODO bind a listener
+            itemView.setOnClickListener {
+                currentUser?.let {
+                    onItemClick(it)
+                }
+            }
         }
 
         fun bind(user: User){
@@ -40,7 +48,7 @@ class UserAdapter() : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCall
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_user_search, parent, false)
-        return UserViewHolder(view)
+        return UserViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {

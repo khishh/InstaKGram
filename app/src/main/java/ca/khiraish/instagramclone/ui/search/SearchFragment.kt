@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +40,7 @@ class SearchFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userAdapter = UserAdapter()
+        val userAdapter = UserAdapter{user -> onItemClick(user)}
         val concatAdapter = ConcatAdapter(userAdapter)
         val recyclerView = view.findViewById<RecyclerView>(R.id.search_recyclerview)
         recyclerView.adapter = concatAdapter
@@ -52,6 +53,11 @@ class SearchFragment : DaggerFragment() {
                 userAdapter.submitList(it as MutableList<User>)
             }
         }
+    }
+
+    private fun onItemClick(user: User){
+        val dirToUserFragment = SearchFragmentDirections.actionNavSearchToUserFragment(user.userId!!)
+        Navigation.findNavController(requireView()).navigate(dirToUserFragment)
     }
 
 }

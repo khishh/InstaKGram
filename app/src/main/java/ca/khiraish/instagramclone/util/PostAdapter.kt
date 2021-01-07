@@ -1,4 +1,4 @@
-package ca.khiraish.instagramclone.ui.profile
+package ca.khiraish.instagramclone.util
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.data.model.Post
-import ca.khiraish.instagramclone.data.model.User
 
 class PostAdapter(): ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback) {
 

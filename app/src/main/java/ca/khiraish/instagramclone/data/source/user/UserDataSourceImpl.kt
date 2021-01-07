@@ -97,6 +97,22 @@ class UserDataSourceImpl :
         }
     }
 
+    override fun getUser(userId: String): Observable<User> {
+        return Observable.create {emitter ->
+            db.collection("Users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val user = documentSnapshot.toObject(User::class.java)
+                    if(user != null){
+                        emitter.onNext(user)
+                    }else{
+                        emitter.onError(Throwable("Could not fetch User data"))
+                    }
+                }
+        }
+    }
+
     override fun getUsers(): Observable<List<User>> {
         return Observable.create {emitter ->
             val fbUser = fa.currentUser;
