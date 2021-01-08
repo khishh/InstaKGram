@@ -35,6 +35,14 @@ class UserRepositoryImpl @Inject constructor(private val userDataSource: UserDat
         return userDataSource.getUsers()
     }
 
+    override fun getNumOfFollowers(userId: String): Observable<Int> {
+        return userDataSource.getNumOfFollowers(userId)
+    }
+
+    override fun getNumOfFollowings(userId: String): Observable<Int> {
+        return userDataSource.getNumOfFollowings(userId)
+    }
+
     override fun getAllFollowings(userId: String): Observable<List<User>> {
         return userDataSource.getAllFollowings(userId)
     }

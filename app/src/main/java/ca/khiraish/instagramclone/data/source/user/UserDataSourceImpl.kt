@@ -133,6 +133,38 @@ class UserDataSourceImpl :
         }
     }
 
+    override fun getNumOfFollowers(userId: String): Observable<Int> {
+        return Observable.create { emitter ->
+            db.collection("Users")
+                .document(userId)
+                .collection("Followers")
+                .get()
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        emitter.onNext(task.result!!.size())
+                    }else{
+                        emitter.onError(Throwable("===== Error: getAllFollowers ${task.exception}"))
+                    }
+                }.addOnFailureListener { emitter.onError(Throwable("===== Error: getAllFollowers $it")) }
+        }
+    }
+
+    override fun getNumOfFollowings(userId: String): Observable<Int> {
+        return Observable.create { emitter ->
+            db.collection("Users")
+                .document(userId)
+                .collection("Followings")
+                .get()
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        emitter.onNext(task.result!!.size())
+                    }else{
+                        emitter.onError(Throwable("===== Error: getFollowings ${task.exception}"))
+                    }
+                }.addOnFailureListener { emitter.onError(Throwable("===== Error: getFollowings $it")) }
+        }
+    }
+
     override fun getAllFollowers(userId: String): Observable<List<User>> {
         return Observable.create { emitter ->
             db.collection("Users")

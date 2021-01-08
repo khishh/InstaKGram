@@ -1,11 +1,8 @@
 package ca.khiraish.instagramclone.ui.user
 
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,7 +84,7 @@ class UserFragment : DaggerFragment() {
         viewModel.fetchUserInfo(userId)
         viewModel.getFollowingStatus(userId)
         viewModel.fetchUserPosts(userId)
-        viewModel.getAllFollowings(userId) //Todo
-        viewModel.getAllFollowers(userId)
+        viewModel.getNumOfFollowings(userId) //Todo
+        viewModel.getNumOfFollowers(userId)
     }
 }

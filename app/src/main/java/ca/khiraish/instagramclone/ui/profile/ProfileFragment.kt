@@ -2,11 +2,9 @@ package ca.khiraish.instagramclone.ui.profile
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -54,6 +52,8 @@ class ProfileFragment : DaggerFragment() {
             postAdapter.submitList(it)
         }
         viewModel.fetchMyPost()
+        viewModel.getNumOfFollowers()
+        viewModel.getNumOfFollowings()
     }
 
 

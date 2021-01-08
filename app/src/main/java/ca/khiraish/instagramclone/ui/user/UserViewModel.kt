@@ -117,6 +117,7 @@ class UserViewModel @Inject constructor(
                         .subscribeBy(
                             onComplete = {
                                 Log.d(TAG, "===== updateFollowerStatus: Success!!")
+                                this.getNumOfFollowers(userId)
                             },
                             onError = {
                                 Log.d(TAG, "===== updateFollowerStatus: Error!! $it")
@@ -126,13 +127,12 @@ class UserViewModel @Inject constructor(
             )
     }
 
-    fun getAllFollowers(userId: String){
-        userRepository.getAllFollowers(userId)
+    fun getNumOfFollowers(userId: String){
+        userRepository.getNumOfFollowers(userId)
             .subscribeBy(
                 onNext = {
-                    numOfFollowers.set(it.size.toString())
-                    Log.d(TAG, "getAllFollowers: $it")
-                    Log.d(TAG, "===== getAllFollowers: ${it.size}")
+                    numOfFollowers.set(it.toString())
+                    Log.d(TAG, "===== getNumOfFollowers: $it")
                 },
                 onError = {
                     Log.d(TAG, "===== getAllFollowers: Error!! $it")
@@ -140,13 +140,12 @@ class UserViewModel @Inject constructor(
             )
     }
 
-    fun getAllFollowings(userId: String){
-        userRepository.getAllFollowings(userId)
+    fun getNumOfFollowings(userId: String){
+        userRepository.getNumOfFollowings(userId)
             .subscribeBy(
                 onNext = {
-                    numOfFollowings.set(it.size.toString())
+                    numOfFollowings.set(it.toString())
                     Log.d(TAG, "getAllFollowings: $it")
-                    Log.d(TAG, "===== getAllFollowings: ${it.size}")
                 },
                 onError = {
                     Log.d(TAG, "===== getAllFollowings: Error!! $it")
