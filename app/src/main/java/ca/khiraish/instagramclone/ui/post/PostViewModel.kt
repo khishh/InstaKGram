@@ -41,11 +41,11 @@ class PostViewModel @Inject constructor(
         userRepository.getUser()
             .subscribeBy(
                 onNext = {t ->
-                    postRepository.savePost(Post(imageUri = imageUri.toString(), caption = description, userId = t.userId!!, userName = t.userName!!))
+                    postRepository.savePost(Post(imageUri = imageUri.toString(), caption = description, userId = t.userId!!, userName = t.userName!!, userImage = t.userImage!!))
                         .subscribeBy (
                             onComplete = {
                             postSuccess.call()
-                            Log.d(TAG, "savePostClick: savePost Success!!")
+                            Log.d(TAG, "savePostClick: savePost Success!! ${t.userImage}")
                             },
                         onError = {
                             errorMsg.set(it.toString())

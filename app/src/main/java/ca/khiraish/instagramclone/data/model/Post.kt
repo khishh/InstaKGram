@@ -9,6 +9,7 @@ data class Post constructor(
     var timestamp: Date? = null,
     var postId: String? = null,
     val imageUri: String? = null,
+    var userImage: String? = null,
     val caption: String? = null,
     val userId: String? = null,
     val userName: String? = null){

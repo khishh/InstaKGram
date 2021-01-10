@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.Navigation
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.data.model.User
+import ca.khiraish.instagramclone.util.UserAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -40,7 +40,9 @@ class SearchFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userAdapter = UserAdapter{user -> onItemClick(user)}
+        val userAdapter = UserAdapter { user ->
+            onItemClick(user)
+        }
         val concatAdapter = ConcatAdapter(userAdapter)
         val recyclerView = view.findViewById<RecyclerView>(R.id.search_recyclerview)
         recyclerView.adapter = concatAdapter

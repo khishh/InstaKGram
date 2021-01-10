@@ -35,6 +35,7 @@ class PostDataSourceImpl : PostDataSource {
                             "imageUri" to it.result.toString(),
                             "caption" to post.caption!!,
                             "userId" to post.userId!!,
+                            "userImage" to post.userImage!!,
                             "userName" to post.userName!!,
                             "timestamp" to timestamp
                         )
@@ -56,6 +57,7 @@ class PostDataSourceImpl : PostDataSource {
 
     override fun fetchMyPost(userId: String): Observable<List<Post>> {
         return Observable.create { emitter ->
+            Log.d(TAG, "fetchMyPost: processing item on thread " + Thread.currentThread().name)
             db.collection("Posts")
                 .document(userId)
                 .collection(userId)

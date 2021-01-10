@@ -1,4 +1,4 @@
-package ca.khiraish.instagramclone.ui.search
+package ca.khiraish.instagramclone.util
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
-import ca.khiraish.instagramclone.data.model.Post
 import ca.khiraish.instagramclone.data.model.User
 
 
 class UserAdapter(
     private val onItemClick: (User) -> Unit
-) : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback){
+) : ListAdapter<User, UserAdapter.UserViewHolder>(
+    UserDiffCallback
+){
 
     class UserViewHolder(itemView : View, private val onItemClick: (User) -> Unit)
         : RecyclerView.ViewHolder(itemView){
@@ -48,7 +49,10 @@ class UserAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_user_search, parent, false)
-        return UserViewHolder(view, onItemClick)
+        return UserViewHolder(
+            view,
+            onItemClick
+        )
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
