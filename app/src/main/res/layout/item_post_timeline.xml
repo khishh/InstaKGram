@@ -36,12 +36,20 @@
         app:layout_constraintTop_toBottomOf="@id/item_post_timeline_userImage"
         tools:layout_editor_absoluteX="16dp" />
 
+    <TextView
+        android:id="@+id/item_post_timeline_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/item_post_timeline_postImage"
+        android:textSize="18sp"/>
+
+
     <ImageView
         android:id="@+id/item_post_timeline_fav"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_fav_empty"
-        app:layout_constraintTop_toBottomOf="@id/item_post_timeline_postImage"
+        app:layout_constraintTop_toBottomOf="@id/item_post_timeline_description"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="5dp"/>
 
@@ -50,7 +58,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_comment"
-        app:layout_constraintTop_toBottomOf="@id/item_post_timeline_postImage"
+        app:layout_constraintTop_toBottomOf="@id/item_post_timeline_description"
         app:layout_constraintStart_toEndOf="@id/item_post_timeline_fav"
         android:layout_marginStart="5dp"/>
 

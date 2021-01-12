@@ -20,9 +20,10 @@ class PostTimelineAdapter : ListAdapter<Post, PostTimelineAdapter.PostViewHolder
 
     class PostViewHolder(itemView: View)
         : RecyclerView.ViewHolder(itemView){
+        private val userName = itemView.findViewById<TextView>(R.id.item_post_timeline_userName)
         private val userImage = itemView.findViewById<CircleImageView>(R.id.item_post_timeline_userImage)
         private val postImage = itemView.findViewById<ImageView>(R.id.item_post_timeline_postImage)
-        private val userName = itemView.findViewById<TextView>(R.id.item_post_timeline_userName)
+        private val postDescription = itemView.findViewById<TextView>(R.id.item_post_timeline_description)
 
         private var currentPost: Post? = null
 
@@ -50,6 +51,7 @@ class PostTimelineAdapter : ListAdapter<Post, PostTimelineAdapter.PostViewHolder
                 .into(postImage)
 
             userName.text = post.userName
+            postDescription.text = post.caption
         }
 
     }

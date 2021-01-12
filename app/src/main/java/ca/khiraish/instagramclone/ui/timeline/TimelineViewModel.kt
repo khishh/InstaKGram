@@ -51,7 +51,8 @@ class TimelineViewModel @Inject constructor(
             Log.d(TAG, "getAllFollowingsPost: ${following.userId}")
             postRepository.fetchMyPost(following.userId!!)
                 .observeOn(Schedulers.io())
-                .map { posts: List<Post> ->  
+                .map { posts: List<Post> ->
+                    Log.d(TAG, "getAllFollowingsPost: processing item on thread " + Thread.currentThread().name)
                     for(post in posts){
                         post.userImage = following.userId
                         post.userImage = following.userImage
@@ -68,7 +69,7 @@ class TimelineViewModel @Inject constructor(
                         count++;
                         if(count == followings.size){
                             Log.d(TAG, "===== getAllFollowingsPost: ALL onComplete with $followingPosts")
-                            followingPosts.sortBy {post-> post.timestamp}
+                            followingPosts.sortByDescending {post-> post.timestamp}
                             followingUserPosts.postValue(followingPosts)
                         }
                     },
