@@ -14,10 +14,6 @@ data class Post constructor(
     val userId: String? = null,
     val userName: String? = null,
     val favUsers: MutableMap<String, User> = mutableMapOf(),
+    val comments: MutableList<String> = mutableListOf(),
     var isFav: Boolean = false
-){
-//    fun toMap(): Map<String, Any> =
-//        HashMap<String, Any>().apply {
-//            postI
-//        }
-}
+)

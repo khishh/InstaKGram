@@ -27,6 +27,7 @@ class PostTimelineAdapter(
         private val viewModel: TimelineViewModel
     ) : RecyclerView.ViewHolder(binding.root){
         val numLikesMsg = ObservableField<String>()
+        val numCommentsMsg = ObservableField<String>()
 
         init {
 
@@ -37,6 +38,7 @@ class PostTimelineAdapter(
             binding.viewmodel = viewModel
             binding.viewholder = this
             composeFavLikesText(post.favUsers.size)
+            composeCommentsText(post.comments.size)
             val picasso = Picasso.get()
             if(!post.userImage.isNullOrEmpty()){
                 picasso.load(post.userImage)
@@ -57,11 +59,19 @@ class PostTimelineAdapter(
             }
         }
 
-        fun composeFavLikesText(numLikes: Int){
+        private fun composeFavLikesText(numLikes: Int){
             when(numLikes){
                 0 -> numLikesMsg.set("")
                 1 -> numLikesMsg.set("$numLikes Like")
-                else -> numLikesMsg.set("$numLikes Like")
+                else -> numLikesMsg.set("$numLikes Likes")
+            }
+        }
+
+        private fun composeCommentsText(numComments: Int){
+            when(numComments){
+                0 -> numCommentsMsg.set("")
+                1 -> numCommentsMsg.set("$numComments Comment")
+                else -> numCommentsMsg.set("$numComments Comments")
             }
         }
     }

@@ -80,9 +80,7 @@ class TimelineViewModel @Inject constructor(
 
 
     private fun checkIsFav(post: Post, user: User) =
-        post.apply {
-            if(favUsers.containsKey(user.userId)) isFav = true
-        }
+        post.apply { if(favUsers.containsKey(user.userId)) isFav = true }
 
     fun updateIsFav(
         postId : String,
