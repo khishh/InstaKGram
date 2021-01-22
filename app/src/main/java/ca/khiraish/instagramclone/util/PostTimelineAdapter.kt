@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,19 +26,18 @@ class PostTimelineAdapter(
         private val binding: ItemPostTimelineBinding,
         private val viewModel: TimelineViewModel
     ) : RecyclerView.ViewHolder(binding.root){
-
-        private var currentPost: Post? = null
+        val numLikesMsg = ObservableField<String>()
 
         init {
 
         }
 
         fun bind(post: Post){
-            currentPost = post
             binding.post = post
             binding.viewmodel = viewModel
+            binding.viewholder = this
+            composeFavLikesText(post.favUsers.size)
             val picasso = Picasso.get()
-
             if(!post.userImage.isNullOrEmpty()){
                 picasso.load(post.userImage)
                     .error(R.mipmap.ic_launcher_round)
@@ -51,15 +51,19 @@ class PostTimelineAdapter(
                 .error(R.mipmap.ic_launcher)
                 .into(binding.itemPostTimelinePostImage)
 
-            binding.itemPostTimelineUserName.text = post.userName
-            binding.itemPostTimelineDescription.text = post.caption
-
             binding.itemPostTimelineFav.setOnClickListener {
                 post.isFav = binding.itemPostTimelineFav.isChecked
-                post.postId?.let { postId -> viewModel.updateIsFav(postId) }
+                post.postId?.let { postId -> viewModel.updateIsFav(postId){ numLikes-> composeFavLikesText(numLikes)} }
             }
         }
 
+        fun composeFavLikesText(numLikes: Int){
+            when(numLikes){
+                0 -> numLikesMsg.set("")
+                1 -> numLikesMsg.set("$numLikes Like")
+                else -> numLikesMsg.set("$numLikes Like")
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {

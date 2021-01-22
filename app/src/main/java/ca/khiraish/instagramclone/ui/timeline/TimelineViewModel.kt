@@ -1,6 +1,8 @@
 package ca.khiraish.instagramclone.ui.timeline
 
 import android.util.Log
+import android.widget.TextView
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ca.khiraish.instagramclone.data.model.Post
@@ -82,16 +84,21 @@ class TimelineViewModel @Inject constructor(
             if(favUsers.containsKey(user.userId)) isFav = true
         }
 
-    fun updateIsFav(postId : String){
+    fun updateIsFav(
+        postId : String,
+        createNumLikesText: (Int) -> Unit
+    ){
         val post = behaviorSubject.value?.first{it.postId == postId} ?: return
         userRepository.getUser()
             .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
             .flatMapCompletable {user ->
                 if(post.isFav){
                     post.favUsers[user.userId!!] = user
                 }else{
                     post.favUsers.remove(user.userId)
                 }
+                createNumLikesText(post.favUsers.size)
                 postRepository.updateIsFav(post.userId!!, post.postId!!, post.favUsers)
             }
             .subscribeBy(

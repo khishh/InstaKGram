@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewmodel"
             type="ca.khiraish.instagramclone.ui.timeline.TimelineViewModel" />
@@ -13,6 +12,9 @@
         <variable
             name="post"
             type="ca.khiraish.instagramclone.data.model.Post" />
+        <variable
+            name="viewholder"
+            type="ca.khiraish.instagramclone.util.PostTimelineAdapter.PostViewHolder"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +42,7 @@
             android:layout_marginStart="10dp"
             android:gravity="center"
             android:textSize="20sp"
-            android:text="Test"/>
+            android:text="@{post.userName}"/>
 
         <ImageView
             android:id="@+id/item_post_timeline_postImage"
@@ -48,13 +50,13 @@
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toBottomOf="@id/item_post_timeline_userImage"
-            tools:layout_editor_absoluteX="16dp" />
+            tools:layout_editor_absoluteX="16dp"/>
 
         <CheckBox
             android:id="@+id/item_post_timeline_fav"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="25dp"
             android:backgroundTint="@android:color/transparent"
             android:button="@drawable/fav_checkbox"
             android:scaleX="1.2"
@@ -65,10 +67,10 @@
 
         <TextView
             android:id="@+id/item_post_timeline_numLikes"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="10 likes"
+            android:layout_marginStart="15dp"
+            android:text="@{viewholder.numLikesMsg}"
             app:layout_constraintTop_toBottomOf="@id/item_post_timeline_fav"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -99,10 +101,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/item_post_timeline_numLikes"
             android:textSize="18sp"
+            android:text="@{post.caption}"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"/>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

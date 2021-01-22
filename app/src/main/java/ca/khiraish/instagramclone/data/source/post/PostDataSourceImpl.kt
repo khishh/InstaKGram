@@ -23,6 +23,7 @@ class PostDataSourceImpl : PostDataSource {
 
     override fun savePost(post: Post): Completable {
         return Completable.create{ emitter ->
+            Log.d(TAG, "savePost: ${Thread.currentThread().name}")
             val imageUri = Uri.parse(post.imageUri)
             val fileName = "${SimpleDateFormat("yyyyMMdd__HHmm", Locale.CANADA).format(Date())}_${imageUri.lastPathSegment}"
             val filePath = st.getReference("Posts/${post.userId}").child(fileName)
@@ -88,6 +89,7 @@ class PostDataSourceImpl : PostDataSource {
     ): Completable {
         Log.d(TAG, "updateIsFav: $newFavUsers")
         return Completable.create{ emitter ->
+            Log.d(TAG, "updateIsFav: ${Thread.currentThread().name}")
             db.collection("Posts")
                 .document(postUserId)
                 .collection(postUserId)
