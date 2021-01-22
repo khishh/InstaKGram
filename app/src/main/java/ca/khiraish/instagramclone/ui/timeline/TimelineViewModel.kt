@@ -10,8 +10,12 @@ import ca.khiraish.instagramclone.data.source.user.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 private const val TAG = "TimelineViewModel"
@@ -20,8 +24,8 @@ class TimelineViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val followingUsers = MutableLiveData<List<User>>()
-    val followingUserPosts = MutableLiveData<List<Post>>()
+    val behaviorSubject = BehaviorSubject.create<List<Post>>()
+    private val disposable = CompositeDisposable()
 
     fun getAllFollowers(){
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -30,39 +34,32 @@ class TimelineViewModel @Inject constructor(
         }else {
             userRepository.getAllFollowings(userId)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-                        followingUsers.postValue(it)
+                        getAllFollowingsPost(it)
                     },
                     onError = { throwable ->
                         Throwable(throwable)
                         Log.d(TAG, "===== getAllFollowers: onError $throwable")
                     }
-                )
+                ).addTo(disposable)
         }
     }
 
-    fun getAllFollowingsPost(){
+    private fun getAllFollowingsPost(followings : List<User>){
         val followingPosts = ArrayList<Post>()
-        val followings = followingUsers.value!!
         var count = 0
-        for (following: User in followings){
-            Log.d(TAG, "getAllFollowingsPost: ${following.userId}")
-            postRepository.fetchMyPost(following.userId!!)
-                .observeOn(Schedulers.io())
-                .map { posts: List<Post> ->
-                    Log.d(TAG, "getAllFollowingsPost: processing item on thread " + Thread.currentThread().name)
-                    for(post in posts){
-                        post.userImage = following.userId
-                        post.userImage = following.userImage
-                    }
-                    Log.d(TAG, "getAllFollowingsPost: post $posts")
-                    posts
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onNext = {
+
+        followings.forEach { following ->
+            Observables.combineLatest(
+                postRepository.fetchMyPost(following.userId!!),
+                userRepository.getUser())
+            { posts, u ->
+                posts.map { post ->  checkIsFav(post, u) }
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onNext = {
                         Log.d(TAG, "===== getAllFollowingsPost: onComplete with ${following.userId}")
                         Log.d(TAG, "getAllFollowingsPost: processing item on thread " + Thread.currentThread().name)
                         followingPosts.addAll(it)
@@ -70,13 +67,42 @@ class TimelineViewModel @Inject constructor(
                         if(count == followings.size){
                             Log.d(TAG, "===== getAllFollowingsPost: ALL onComplete with $followingPosts")
                             followingPosts.sortByDescending {post-> post.timestamp}
-                            followingUserPosts.postValue(followingPosts)
+                            behaviorSubject.onNext(followingPosts)
                         }
                     },
                     onError = {Throwable("===== getAllFollowingsPost: onError $it")}
-                )
+            ).addTo(disposable)
+        }
+    }
+
+
+
+    private fun checkIsFav(post: Post, user: User) =
+        post.apply {
+            if(favUsers.containsKey(user.userId)) isFav = true
         }
 
+    fun updateIsFav(postId : String){
+        val post = behaviorSubject.value?.first{it.postId == postId} ?: return
+        userRepository.getUser()
+            .subscribeOn(Schedulers.io())
+            .flatMapCompletable {user ->
+                if(post.isFav){
+                    post.favUsers[user.userId!!] = user
+                }else{
+                    post.favUsers.remove(user.userId)
+                }
+                postRepository.updateIsFav(post.userId!!, post.postId!!, post.favUsers)
+            }
+            .subscribeBy(
+                onComplete = { Log.d(TAG, "updateIsFav: updateIsFav:: SUCCESS!!")},
+                onError = { Log.d(TAG, "updateIsFav: updateIsFav:: Failure!!") }
+            ).addTo(disposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
     }
 
 }

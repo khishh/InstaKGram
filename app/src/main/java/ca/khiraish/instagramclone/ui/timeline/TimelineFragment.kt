@@ -14,6 +14,9 @@ import ca.khiraish.instagramclone.databinding.FragmentTimelineBinding
 import ca.khiraish.instagramclone.util.PostAdapter
 import ca.khiraish.instagramclone.util.PostTimelineAdapter
 import dagger.android.support.DaggerFragment
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 private const val TAG = "TimelineFragment"
@@ -28,6 +31,7 @@ class TimelineFragment : DaggerFragment() {
     }
 
     private lateinit var binding: FragmentTimelineBinding
+    private val disposables = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,19 +45,24 @@ class TimelineFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.timeline_recyclerview)
-        val timelineAdapter = PostTimelineAdapter()
+        val timelineAdapter = PostTimelineAdapter(viewModel)
         recyclerView.adapter = timelineAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+
         viewModel.getAllFollowers()
-        viewModel.followingUsers.observe(viewLifecycleOwner){
-            Log.d(TAG, "onChange: followingUsers called")
-            println(it.toString())
-            viewModel.getAllFollowingsPost()
-        }
-        viewModel.followingUserPosts.observe(viewLifecycleOwner){
-            Log.d(TAG, "onChanged: followingUserPosts called")
-            println(it.toString())
-            timelineAdapter.submitList(it)
-        }
+
+        viewModel.behaviorSubject.subscribeBy(
+            onNext = {posts->
+                Log.d(TAG, "onChanged: followingUserPosts called")
+                timelineAdapter.submitList(posts)},
+            onError = {error->
+                Log.d(TAG, "behaviorSubject Error: $error")
+            }
+        ).addTo(disposables)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposables.clear()
     }
 }

@@ -12,7 +12,10 @@ data class Post constructor(
     var userImage: String? = null,
     val caption: String? = null,
     val userId: String? = null,
-    val userName: String? = null){
+    val userName: String? = null,
+    val favUsers: MutableMap<String, User> = mutableMapOf(),
+    var isFav: Boolean = false
+){
 //    fun toMap(): Map<String, Any> =
 //        HashMap<String, Any>().apply {
 //            postI

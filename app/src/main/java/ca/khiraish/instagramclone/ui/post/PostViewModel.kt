@@ -37,21 +37,36 @@ class PostViewModel @Inject constructor(
     fun savePostClick() {
         // TODO :: create session manager class to hold currently login user object
         Log.d(TAG, "savePostClick: started")
-        val description = caption.get()
+        val description = caption.get() ?: return
+        if(imageUri.toString().isEmpty()) return
         userRepository.getUser()
+            .flatMapCompletable { t: User ->
+                postRepository.savePost(Post(imageUri = imageUri.toString(), caption = description, userId = t.userId!!, userName = t.userName!!, userImage = t.userImage!!))
+            }
             .subscribeBy(
-                onNext = {t ->
-                    postRepository.savePost(Post(imageUri = imageUri.toString(), caption = description, userId = t.userId!!, userName = t.userName!!, userImage = t.userImage!!))
-                        .subscribeBy (
-                            onComplete = {
-                            postSuccess.call()
-                            Log.d(TAG, "savePostClick: savePost Success!! ${t.userImage}")
-                            },
-                        onError = {
-                            errorMsg.set(it.toString())
-                        }).addTo(disposable)
+                onComplete = {
+                    caption.set("")
+                    postSuccess.call()
+                    Log.d(TAG, "savePostClick: savePost Success!!")
+                },
+                onError = {
+                    errorMsg.set(it.toString())
                 }
             ).addTo(disposable)
+//            .subscribeBy(
+//                onNext = {t ->
+//                    postRepository.savePost(Post(imageUri = imageUri.toString(), caption = description, userId = t.userId!!, userName = t.userName!!, userImage = t.userImage!!))
+//                        .subscribeBy (
+//                        onComplete = {
+//                            caption.set("")
+//                            postSuccess.call()
+//                            Log.d(TAG, "savePostClick: savePost Success!! ${t.userImage}")
+//                        },
+//                        onError = {
+//                            errorMsg.set(it.toString())
+//                        }).addTo(disposable)
+//                }
+//            ).addTo(disposable)
     }
 
     override fun onCleared() {

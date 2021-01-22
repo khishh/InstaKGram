@@ -3,6 +3,7 @@ package ca.khiraish.instagramclone.data.source.post
 import android.net.Uri
 import android.util.Log
 import ca.khiraish.instagramclone.data.model.Post
+import ca.khiraish.instagramclone.data.model.User
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -37,7 +38,8 @@ class PostDataSourceImpl : PostDataSource {
                             "userId" to post.userId!!,
                             "userImage" to post.userImage!!,
                             "userName" to post.userName!!,
-                            "timestamp" to timestamp
+                            "timestamp" to timestamp,
+                            "favUsers" to post.favUsers
                         )
                         Log.d(TAG, "===== savePost: post savetime == $timestamp")
                         db.collection("Posts")
@@ -78,5 +80,26 @@ class PostDataSourceImpl : PostDataSource {
                 .addOnFailureListener { Throwable("Error: fetchMyPost $it") }
         }
     }
+
+    override fun updateIsFav(
+        postUserId: String,
+        postId: String,
+        newFavUsers: MutableMap<String, User>
+    ): Completable {
+        Log.d(TAG, "updateIsFav: $newFavUsers")
+        return Completable.create{ emitter ->
+            db.collection("Posts")
+                .document(postUserId)
+                .collection(postUserId)
+                .document(postId)
+                .update("favUsers", newFavUsers)
+                .addOnCompleteListener {
+                    Log.d(TAG, "updateIsFav: SUCCESS!!")
+                    emitter.onComplete()
+                }
+                .addOnFailureListener { emitter.onError(Throwable("updateIsFav: Error $it")) }
+        }
+    }
+
 
 }

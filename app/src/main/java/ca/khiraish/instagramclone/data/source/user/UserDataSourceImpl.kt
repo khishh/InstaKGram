@@ -14,7 +14,6 @@ class UserDataSourceImpl :
 
     private val fa = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    private val st = FirebaseStorage.getInstance()
 
 
     override fun isSignIn(): Observable<Boolean> =
@@ -31,11 +30,6 @@ class UserDataSourceImpl :
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
                         task.result?.user?.uid?.let {
-//                            FirebaseDatabase.getInstance().getReference("Users")
-//                                .child(it)
-//                                .setValue(User(userId = it, userName = userName, userEmail = email, userFullName = fullName, userBio = "", userImage = ""))
-//                                .addOnSuccessListener { emitter.onComplete() }
-//                                .addOnFailureListener { emitter.onError(Throwable(task.exception?.message))}
                             db.collection("Users")
                                 .document(it)
                                 .set(User(userId = it, userName = userName, userEmail = email, userFullName = fullName, userBio = "", userImage = ""))
@@ -74,7 +68,7 @@ class UserDataSourceImpl :
         return Observable.create {emitter ->
             val fbUser = fa.currentUser
             if(fbUser == null){
-                emitter.onError(Throwable("You are not signed in"))
+                emitter.onError(Throwable("===== getUser:Error You are not signed in"))
             }else{
                 db.collection("Users")
                     .document(fbUser.uid)
@@ -111,7 +105,7 @@ class UserDataSourceImpl :
         return Observable.create {emitter ->
             val fbUser = fa.currentUser
             if(fbUser == null){
-                emitter.onError(Throwable("You are not signed in"))
+                emitter.onError(Throwable("===== Error: getUsers You are not signed in"))
             }else{
                 db.collection("Users")
                     .get()
