@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="ca.khiraish.instagramclone.ui.timeline.TimelineFragment"
         android:label="fragment_timeline"
-        tools:layout="@layout/fragment_timeline" />
+        tools:layout="@layout/fragment_timeline" >
+        <action
+            android:id="@+id/action_nav_home_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_search"
         android:name="ca.khiraish.instagramclone.ui.search.SearchFragment"
@@ -44,6 +48,18 @@
         android:label="UserFragment" >
         <argument
             android:name="userId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentFragment"
+        android:name="ca.khiraish.instagramclone.ui.comment.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" >
+        <argument
+            android:name="postUserId"
+            app:argType="string" />
+        <argument
+            android:name="postId"
             app:argType="string" />
     </fragment>
 </navigation>

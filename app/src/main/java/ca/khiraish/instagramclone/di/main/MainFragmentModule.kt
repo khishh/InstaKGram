@@ -1,6 +1,7 @@
 package ca.khiraish.instagramclone.di.main
 
 import ca.khiraish.instagramclone.di.FragmentScope
+import ca.khiraish.instagramclone.ui.comment.CommentFragment
 import ca.khiraish.instagramclone.ui.notification.NotificationFragment
 import ca.khiraish.instagramclone.ui.post.PostFragment
 import ca.khiraish.instagramclone.ui.profile.ProfileFragment
@@ -36,4 +37,8 @@ abstract class MainFragmentModule {
     @FragmentScope
     @ContributesAndroidInjector
     abstract fun userFragment(): UserFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun commentFragment(): CommentFragment
 }

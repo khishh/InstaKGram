@@ -1,11 +1,8 @@
-package ca.khiraish.instagramclone.util
+package ca.khiraish.instagramclone.ui.timeline
 
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,18 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.data.model.Post
 import ca.khiraish.instagramclone.databinding.ItemPostTimelineBinding
-import ca.khiraish.instagramclone.ui.timeline.TimelineViewModel
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
-import javax.inject.Inject
 
 class PostTimelineAdapter(
-    private val viewModel: TimelineViewModel
+    private val viewModel: TimelineViewModel,
+    private val moveToCommentFragment: (String, String) -> Unit
 ) : ListAdapter<Post, PostTimelineAdapter.PostViewHolder>(PostTimelineDiffCallback) {
 
     class PostViewHolder(
         private val binding: ItemPostTimelineBinding,
-        private val viewModel: TimelineViewModel
+        private val viewModel: TimelineViewModel,
+        private val moveToCommentFragment: (String, String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root){
         val numLikesMsg = ObservableField<String>()
         val numCommentsMsg = ObservableField<String>()
@@ -57,6 +53,8 @@ class PostTimelineAdapter(
                 post.isFav = binding.itemPostTimelineFav.isChecked
                 post.postId?.let { postId -> viewModel.updateIsFav(postId){ numLikes-> composeFavLikesText(numLikes)} }
             }
+
+            binding.itemPostTimelineComment.setOnClickListener { moveToCommentFragment(post.userId!!, post.postId!!) }
         }
 
         private fun composeFavLikesText(numLikes: Int){
@@ -76,12 +74,18 @@ class PostTimelineAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): PostViewHolder {
         val binding = ItemPostTimelineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, viewModel)
+        return PostViewHolder(binding, viewModel, moveToCommentFragment)
     }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: PostViewHolder,
+        position: Int
+    ) {
         val post = getItem(position)
         holder.bind(post)
     }

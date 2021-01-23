@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.khiraish.instagramclone.R
 import ca.khiraish.instagramclone.databinding.FragmentTimelineBinding
-import ca.khiraish.instagramclone.util.PostAdapter
-import ca.khiraish.instagramclone.util.PostTimelineAdapter
 import dagger.android.support.DaggerFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -34,18 +32,21 @@ class TimelineFragment : DaggerFragment() {
     private val disposables = CompositeDisposable()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentTimelineBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.timeline_recyclerview)
-        val timelineAdapter = PostTimelineAdapter(viewModel)
+        val timelineAdapter = PostTimelineAdapter(viewModel){uid, pid -> moveToCommentFragment(uid, pid)}
         recyclerView.adapter = timelineAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -59,6 +60,11 @@ class TimelineFragment : DaggerFragment() {
                 Log.d(TAG, "behaviorSubject Error: $error")
             }
         ).addTo(disposables)
+    }
+
+    private fun moveToCommentFragment(postUserId: String, postId: String){
+        val dirToComment = TimelineFragmentDirections.actionNavHomeToCommentFragment(postUserId, postId)
+        Navigation.findNavController(requireView()).navigate(dirToComment)
     }
 
     override fun onDestroyView() {

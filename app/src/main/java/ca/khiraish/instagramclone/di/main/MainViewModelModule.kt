@@ -2,6 +2,7 @@ package ca.khiraish.instagramclone.di.main
 
 import androidx.lifecycle.ViewModel
 import ca.khiraish.instagramclone.di.ViewModelKey
+import ca.khiraish.instagramclone.ui.comment.CommentViewModel
 import ca.khiraish.instagramclone.ui.post.PostViewModel
 import ca.khiraish.instagramclone.ui.profile.ProfileViewModel
 import ca.khiraish.instagramclone.ui.search.SearchViewModel
@@ -39,4 +40,9 @@ abstract class MainViewModelModule{
     @IntoMap
     @ViewModelKey(UserViewModel::class)
     abstract fun bindUserViewModel(viewModel: UserViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CommentViewModel::class)
+    abstract fun bindCommentViewModel(viewModel: CommentViewModel): ViewModel
 }

@@ -14,9 +14,10 @@
             type="ca.khiraish.instagramclone.data.model.Post" />
         <variable
             name="viewholder"
-            type="ca.khiraish.instagramclone.util.PostTimelineAdapter.PostViewHolder"/>
+            type="ca.khiraish.instagramclone.ui.timeline.PostTimelineAdapter.PostViewHolder"/>
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
